@@ -24,7 +24,7 @@ public enum TokenType {
 
     // Literals
     IDENTIFIER, STRING, NUMBER, CHAR, NATIVE,
-    PREFIX, INFIX, POSTFIX,
+    PREFIX, INFIX,
 
 
     // Keywords
