@@ -58,7 +58,7 @@ public class Lexer {
 
     public List<Token> scanTokens() {
         while (!isAtEnd()) {
-            // We are at the beginning of the next lexeme.
+            // We are at the beginning of the next lexeme
             start = current;
             scanToken();
         }
@@ -99,7 +99,7 @@ public class Lexer {
             case ' ':
             case '\r':
             case '\t':
-                // Ignore whitespace.
+                // Ignore whitespace
                 break;
             case '\n':
                 line++;
@@ -127,7 +127,7 @@ public class Lexer {
             pointToNextChar();
         }
 
-        // Look for a fractional part.
+        // Look for a fractional part
         if (getCurrentChar() == '.' && isDigit(getNextChar())) {
             // Consume the "."
             pointToNextChar();
@@ -145,16 +145,16 @@ public class Lexer {
             pointToNextChar();
         }
 
-        // Unterminated scanString.
+        // Unterminated scanString
         if (isAtEnd()) {
             JavaLoXRuntime.error(line, "Unterminated scanString.");
             return;
         }
 
-        // The closing ".
+        // The closing "
         pointToNextChar();
 
-        // Trim the surrounding quotes.
+        // Trim the surrounding quotes
         String value = source.substring(start + 1, current - 1);
         addToken(STRING, value);
     }
@@ -173,7 +173,7 @@ public class Lexer {
     private void scanIdentifier() {
         while (isAlphaNumeric(getCurrentChar())) pointToNextChar();
 
-        // See if the scanIdentifier is a reserved word.
+        // See if the scanIdentifier is a reserved word
         String text = source.substring(start, current);
 
         TokenType type = keywords.get(text);
@@ -200,10 +200,6 @@ public class Lexer {
         return current >= source.length();
     }
 
-    private boolean isDigit(char c) {
-        return c >= '0' && c <= '9';
-    }
-
     private boolean match(char expected) {
         if (isAtEnd()) {
             return false;
@@ -223,6 +219,10 @@ public class Lexer {
     private char getNextChar() {
         if (current + 1 >= source.length()) return '\0';
         return source.charAt(current + 1);
+    }
+
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
     }
 
     private boolean isAlpha(char c) {

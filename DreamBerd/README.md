@@ -16,11 +16,7 @@ todepond woz here
 
 > **New:** [DreamBerd has been renamed to nDreamBerd](https://github.com/TodePond/nDreamBerd/releases/tag/vv1.0)
 
-[<img align="right" height="100" src="shapes.png">](https://github.com/TodePond/DreamBerd/blob/main/examples/Examples.md "Click here for the examples page.")
-
 # DreamBerd 3
-
-![Coverage](badges/coverage-109.svg)
 
 DreamBerd 3 is a perfect programming language. These are its features!<br>
 When you've finished reading through all the features, check out the [examples](https://github.com/TodePond/DreamBerd/blob/main/Examples.md).
