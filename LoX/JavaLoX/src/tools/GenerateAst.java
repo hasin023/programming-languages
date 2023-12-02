@@ -1,4 +1,4 @@
-package tool;
+package tools;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,26 +11,25 @@ public class GenerateAst {
         args = new String[]{"src/ast"};
 
         String outputDir = args[0];
-        defineAst(outputDir, "Expr", Arrays.asList(
-                "Binary   : Expr left, Token operator, Expr right",
-                "Grouping : Expr expression",
-                "Literal  : Object value",
-                "Unary    : Token operator, Expr right"
+        defineAst(outputDir, "Expression", Arrays.asList(
+                "BinaryExp   : Expression left, Token operator, Expression right",
+                "GroupingExp : Expression expression",
+                "LiteralExp  : Object value",
+                "UnaryExp    : Token operator, Expression right"
         ));
     }
 
-    private static void defineAst(
-            String outputDir, String baseName, List<String> types)
-            throws IOException {
+    private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
         String path = outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8);
 
         writer.println("package ast;");
         writer.println();
+        writer.println("import visitors.*;");
         writer.println("import token.Token;");
         writer.println("import java.util.List;");
         writer.println();
-        writer.println("abstract class " + baseName + " {");
+        writer.println("public abstract class " + baseName + " {");
 
         // The AST classes.
         for (String type : types) {
@@ -39,16 +38,17 @@ public class GenerateAst {
             defineType(writer, baseName, className, fields);
         }
 
+        // The base accept() method.
+        writer.println();
+        writer.println("  public abstract <R> R accept(ExpressionVisitor<R> expressionVisitor);");
+
         writer.println("}");
         writer.close();
     }
 
 
-    private static void defineType(
-            PrintWriter writer, String baseName,
-            String className, String fieldList) {
-        writer.println("  static class " + className + " extends " +
-                baseName + " {");
+    private static void defineType(PrintWriter writer, String baseName, String className, String fieldList) {
+        writer.println("  public static class " + className + " extends " + baseName + " {");
 
         // Constructor.
         writer.println("    " + className + "(" + fieldList + ") {");
@@ -60,6 +60,13 @@ public class GenerateAst {
             writer.println("      this." + name + " = " + name + ";");
         }
 
+        writer.println("    }");
+
+        // Visitor pattern.
+        writer.println();
+        writer.println("    @Override");
+        writer.println("    public <R> R accept(ExpressionVisitor<R> expressionVisitor) {");
+        writer.println("      return expressionVisitor.visit" + className + baseName + "(this);");
         writer.println("    }");
 
         // Fields.
