@@ -8,10 +8,8 @@ import java.util.List;
 
 public class GenerateAst {
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.err.println("Usage: generate_ast <output directory>");
-            System.exit(64);
-        }
+        args = new String[]{"src/ast"};
+
         String outputDir = args[0];
         defineAst(outputDir, "Expr", Arrays.asList(
                 "Binary   : Expr left, Token operator, Expr right",
@@ -29,6 +27,7 @@ public class GenerateAst {
 
         writer.println("package ast;");
         writer.println();
+        writer.println("import token.Token;");
         writer.println("import java.util.List;");
         writer.println();
         writer.println("abstract class " + baseName + " {");
